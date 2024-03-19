@@ -17,7 +17,7 @@ public class mainFrom extends JFrame implements ActionListener {
         loginFrom login = new loginFrom();
         login.setVisible(true);
         // JOptionPane.showMessageDialog(null, "Please Login");
-
+        
     }
 
     public mainFrom(staff StaffData) {
