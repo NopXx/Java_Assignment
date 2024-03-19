@@ -95,7 +95,7 @@ public class loginFrom extends JFrame implements ActionListener {
                         staffData.setSFname(rs.getString("s_fname"));
                         staffData.setSLname(rs.getString("s_lname"));
                         staffData.setSTel(rs.getString("s_tel"));
-                        staffData.setRole(rs.getString("position"));
+                        staffData.setRole(rs.getString("role"));
                         System.out.println(staffData.toString());
                         dispose();
                         mainFrom main = new mainFrom(staffData);
