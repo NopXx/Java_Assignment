@@ -56,12 +56,12 @@ public class staffForm extends JFrame implements ActionListener {
         btnAddData = new JButton("Add Data");
         btnAddData.addActionListener(this);
         btnAddData.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        btnAddData.setBounds(250, 75, 100, 30);
+        btnAddData.setBounds(350, 75, 100, 30);
         contentPane.add(btnAddData);
         // Search Bar Button
         SearchField = new JTextField();
         SearchField.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        SearchField.setBounds(475, 75, 350, 30);
+        SearchField.setBounds(590, 75, 250, 30);
         contentPane.add(SearchField);
         btnSearch = new JButton("Search");
         btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -73,7 +73,7 @@ public class staffForm extends JFrame implements ActionListener {
         contentPane.add(listTable);
         // Scroll Pane
         JScrollPane scrollPane = new JScrollPane(listTable);
-        scrollPane.setBounds(250, 125, 700, 300);
+        scrollPane.setBounds(350, 125, 600, 300);
         getContentPane().add(scrollPane);
 
     }
