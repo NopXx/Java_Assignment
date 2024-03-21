@@ -26,14 +26,12 @@ public class accessoryAdd extends JFrame implements ActionListener {
         // }
 
         setTitle("Accessory Management System");
-        setBounds(450, 190, 1014, 597);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+        
+        
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        setContentPane(contentPane);
+        
         contentPane.setLayout(null);
 
         JLabel lblNewLabel = new JLabel("Hello Manager waka");
@@ -81,22 +79,31 @@ public class accessoryAdd extends JFrame implements ActionListener {
         btnCancel.setBounds(550, 350, 100, 50);
         contentPane.add(btnCancel);
 
+        // set windows
+        setContentPane(contentPane);
+        pack();
+        setBounds(450, 190, 1014, 597);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setResizable(false);
+
     }
 
     public void actionPerformed(ActionEvent event) {
 
     }
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    accessoryAdd frame = new accessoryAdd();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+    // remove main
+    // public static void main(String[] args) {
+    //     EventQueue.invokeLater(new Runnable() {
+    //         public void run() {
+    //             try {
+    //                 accessoryAdd frame = new accessoryAdd();
+    //                 frame.setVisible(true);
+    //             } catch (Exception e) {
+    //                 e.printStackTrace();
+    //             }
+    //         }
+    //     });
+    // }
 }

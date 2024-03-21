@@ -126,6 +126,8 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
                 if (column == 3) {
                     // Edit action
                     // Implement your edit logic here
+                    // open form
+                    new accessoryAdd().setVisible(true);
                     System.out.println("Edit button clicked for row: " + row);
                 } else if (column == 4) {
                     // Delete action
