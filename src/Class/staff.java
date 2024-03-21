@@ -1,3 +1,4 @@
+package Class;
 public class staff {
     private int s_id;
     private String s_user;
