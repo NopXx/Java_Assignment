@@ -65,7 +65,7 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
         // Search Bar Button
         SearchField = new JTextField();
         SearchField.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        SearchField.setBounds(590, 75, 250, 30);
+        SearchField.setBounds(500, 75, 325, 30);
         contentPane.add(SearchField);
         btnSearch = new JButton("Search");
         btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -145,11 +145,12 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
                 ((JButton) value).doClick();
             } else {
                 // Handle edit and delete actions here
-                if (column == 3) {
+                if (column == 4) {
                     // Edit action
                     // Implement your edit logic here
+                    new staffAdd().setVisible(true);
                     System.out.println("Edit button clicked for row: " + row);
-                } else if (column == 4) {
+                } else if (column == 5) {
                     // Delete action
                     // Implement your delete logic here
                     System.out.println("Delete button clicked for row: " + row);

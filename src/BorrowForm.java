@@ -3,26 +3,36 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+
 import java.awt.event.*;
+import java.sql.*;
 import java.awt.*;
 import java.util.*;
 
-public class accessoryForm extends JFrame implements ActionListener, MouseListener {
+public class BorrowForm extends JFrame implements ActionListener, MouseListener {
 
     database db = new database();
     private JPanel contentPane;
-    JButton logout, btnAddData, btnSearch;
+    JButton logout, btnBorrow, btnReturn, btnSearch;
     JTextField SearchField;
     JTable listTable;
 
-    public accessoryForm() {
+    public BorrowForm() {
+        // staff staffData = StaffData;
+        // System.out.println(staffData.toString());
+        // if (staffData.getSUser() == "" || staffData.getSUser() == null) {
+        // dispose();
+        // loginFrom login = new loginFrom();
+        // login.setVisible(true);
+        // // JOptionPane.showMessageDialog(null, "Please Login");
+        // }
+        String Data[][] = { { "1", "Waka", "FootBall", "3", "13/02/2567", "15/02/2567", "Edit", "Delete" },
+                { "2", "Sukjai", "BasketBall", "1", "13/02/2567", "14/02/2567", "Edit", "Delete" },
+                { "3", "Lama", "BasketBall", "1", "15/02/2567", "16/02/2567", "Edit", "Delete" },
+                { "4", "Hello", "Table Tennis", "2", "18/02/2567", "18/02/2567", "Edit", "Delete" }, };
 
-        String Data[][] = { { "1", "VolleyBall", "15", "Edit", "Delete" },
-                { "2", "BasketBall", "20", "Edit", "Delete" },
-                { "3", "FootBall", "10", "Edit", "Delete" },
-                { "4", "Table Tennis", "20", "Edit", "Delete" } };
-
-        String Header[] = { "No", "Name", "Count", "Edit", "Delete" };
+        String Header[] = { "No", "Username", "Accessory Name", "Count", "Borrow Date", "Return Date", "Edit",
+                "Delete" };
 
         setTitle("Accessory Management System");
         setBounds(450, 190, 1014, 597);
@@ -48,18 +58,24 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
         contentPane.add(logout);
 
         // Button Add Data
-        btnAddData = new JButton("Add Data");
-        btnAddData.addActionListener(this);
-        btnAddData.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        btnAddData.setBounds(375, 75, 100, 30);
-        contentPane.add(btnAddData);
+        btnBorrow = new JButton("Borrow");
+        btnBorrow.addActionListener(this);
+        btnBorrow.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        btnBorrow.setBounds(50, 75, 100, 30);
+        contentPane.add(btnBorrow);
+        btnReturn = new JButton("Return");
+        btnReturn.addActionListener(this);
+        btnReturn.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        btnReturn.setBounds(175, 75, 100, 30);
+        contentPane.add(btnReturn);
+        // Search Bar Button
         SearchField = new JTextField();
         SearchField.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        SearchField.setBounds(500, 75, 300, 30);
+        SearchField.setBounds(500, 75, 325, 30);
         contentPane.add(SearchField);
         btnSearch = new JButton("Search");
         btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        btnSearch.setBounds(825, 75, 100, 30);
+        btnSearch.setBounds(850, 75, 100, 30);
         contentPane.add(btnSearch);
 
         DefaultTableModel model = new DefaultTableModel(Data, Header) {
@@ -72,22 +88,28 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
         listTable = new JTable(model);
         listTable.getColumn("Edit").setCellRenderer(new ButtonRenderer());
         listTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
-        listTable.setIntercellSpacing(new Dimension(10,10));
+        listTable.setIntercellSpacing(new Dimension(10, 10));
+        listTable.getColumn("No").setMaxWidth(25);
         listTable.setRowHeight(40);
         listTable.addMouseListener(this);
-
+        // Scroll Pane
         JScrollPane scrollPane = new JScrollPane(listTable);
-        scrollPane.setBounds(375, 125, 555, 300);
-        contentPane.add(scrollPane);
+        scrollPane.setBounds(50, 125, 900, 300);
+        getContentPane().add(scrollPane);
+
     }
 
     public void actionPerformed(ActionEvent event) {
-        // Handle button actions here
+        if (event.getSource() == btnBorrow) {
+            new BorrowForm().setVisible(true);
+        } else if (event.getSource() == btnReturn) {
+            new ReturnPopup().setVisible(true);
+        }
     }
 
     class ButtonRenderer extends JButton implements TableCellRenderer {
         public ButtonRenderer() {
-            setFont(new Font("Tahoma", Font.PLAIN, 16));
+            setFont(new Font("Tahoma", Font.PLAIN, 14));
             setSize(20, 10);
             Border padding = BorderFactory.createEmptyBorder(0, 10, 0, 10);
             setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
@@ -112,7 +134,7 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    accessoryForm frame = new accessoryForm();
+                    BorrowForm frame = new BorrowForm();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -132,13 +154,12 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
                 ((JButton) value).doClick();
             } else {
                 // Handle edit and delete actions here
-                if (column == 3) {
+                if (column == 6) {
                     // Edit action
                     // Implement your edit logic here
-                    // open form
-                    new accessoryAdd().setVisible(true);
+                    new BorrowPopup().setVisible(true);
                     System.out.println("Edit button clicked for row: " + row);
-                } else if (column == 4) {
+                } else if (column == 7) {
                     // Delete action
                     // Implement your delete logic here
                     System.out.println("Delete button clicked for row: " + row);

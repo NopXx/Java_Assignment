@@ -36,18 +36,6 @@ public class staffAdd extends JFrame implements ActionListener {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Hello Manager waka");
-        lblNewLabel.setForeground(Color.BLACK);
-        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblNewLabel.setBounds(700, 20, 273, 15);
-        contentPane.add(lblNewLabel);
-
-        logout = new JButton("Logout");
-        logout.addActionListener(this);
-        logout.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        logout.setBounds(890, 10, 100, 30);
-        contentPane.add(logout);
-
         // Button Add Data
         AddLabel = new JLabel("Add Staff Data");
         AddLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
