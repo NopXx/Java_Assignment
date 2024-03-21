@@ -1,3 +1,4 @@
+package Class;
 public class lend_accessory {
     private String username;
     private int accessoryId;

@@ -1,5 +1,10 @@
+package Form;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import Class.database;
+
 import java.awt.event.*;
 import java.sql.*;
 import java.awt.*;

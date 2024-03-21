@@ -1,21 +1,26 @@
+package Form;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import Class.database;
+
 import java.awt.event.*;
 import java.sql.*;
 import java.awt.*;
 import java.util.*;
 import java.util.jar.Attributes.Name;
 
-public class BorrowPopup extends JFrame implements ActionListener {
+public class ReturnPopup extends JFrame implements ActionListener {
 
     database db = new database();
     private JPanel contentPane;
     JButton logout, btnSave, btnCancel;
-    JLabel AddLabel, UserLabel, AccessoryLabel, CountLabel, DateLabel;
-    JTextField UserField, AccessoryField, CountField, DateField;
+    JLabel AddLabel, UserLabel, AccessoryLabel, CountLabel, CountDateLabel, BrDateLabel , RtDateLabel, StatusLabel, FineLabel;
+    JTextField UserField, AccessoryField, CountField, CountDateField, BrDateField, RtDateField, StatusField, FineField;
     JTable listTable;
 
-    public BorrowPopup() {
+    public ReturnPopup() {
         // staff staffData = StaffData;
         // System.out.println(staffData.toString());
         // if (staffData.getSUser() == "" || staffData.getSUser() == null) {
@@ -70,37 +75,67 @@ public class BorrowPopup extends JFrame implements ActionListener {
         contentPane.add(AccessoryField);
 
         // Count label Field
-        CountLabel = new JLabel("Count : ");
+        CountLabel = new JLabel("Borrow Count: ");
         CountLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        CountLabel.setBounds(125, 220, 100, 30);
+        CountLabel.setBounds(125, 220, 150, 30);
         contentPane.add(CountLabel);
         CountField = new JTextField();
         CountField.setBounds(125, 245, 300, 30);
         contentPane.add(CountField);
+        CountDateLabel = new JLabel("Return Count : ");
+        CountDateLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        CountDateLabel.setBounds(125, 285, 150, 30);
+        contentPane.add(CountDateLabel);
+        CountDateField = new JTextField();
+        CountDateField.setBounds(125, 315, 300, 30);
+        contentPane.add(CountDateField);
 
         // Date Label Field
-        DateLabel = new JLabel("Date : ");
-        DateLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        DateLabel.setBounds(125, 285, 100, 30);
-        contentPane.add(DateLabel);
-        DateField = new JTextField();
-        DateField.setBounds(125, 310, 300, 30);
-        contentPane.add(DateField);
+        BrDateLabel = new JLabel("Borrow Date : ");
+        BrDateLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        BrDateLabel.setBounds(125, 355, 150, 30);
+        contentPane.add(BrDateLabel);
+        BrDateField = new JTextField();
+        BrDateField.setBounds(125, 380, 300, 30);
+        contentPane.add(BrDateField);
+        RtDateLabel = new JLabel("Return Date : ");
+        RtDateLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        RtDateLabel.setBounds(125, 420, 150, 30);
+        contentPane.add(RtDateLabel);
+        RtDateField = new JTextField();
+        RtDateField.setBounds(125, 445, 300, 30);
+        contentPane.add(RtDateField);
+
+        // Accessory Fine Label Field
+        StatusLabel = new JLabel("Accessory Status : ");
+        StatusLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        StatusLabel.setBounds(125, 495, 150, 30);
+        contentPane.add(StatusLabel);
+        StatusField = new JTextField();
+        StatusField.setBounds(125, 520, 300, 30);
+        contentPane.add(StatusField);
+        FineLabel = new JLabel("Fine : ");
+        FineLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        FineLabel.setBounds(125, 560, 150, 30);
+        contentPane.add(FineLabel);
+        FineField = new JTextField();
+        FineField.setBounds(125, 585, 300, 30);
+        contentPane.add(FineField);
 
         // Save Cancel Button
         btnSave = new JButton("SAVE");
         btnSave.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        btnSave.setBounds(125, 400, 100, 50);
+        btnSave.setBounds(125, 725, 100, 50);
         contentPane.add(btnSave);
         btnCancel = new JButton("CANCEL");
         btnCancel.setFont(new Font("Tohama", Font.PLAIN, 16));
-        btnCancel.setBounds(325, 400, 100, 50);
+        btnCancel.setBounds(325, 725, 100, 50);
         contentPane.add(btnCancel);
 
         // set windows
         setContentPane(contentPane);
         pack();
-        setBounds(450, 190, 550, 550);
+        setBounds(450, 190, 550, 850);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);

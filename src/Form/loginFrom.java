@@ -1,5 +1,10 @@
+package Form;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import Class.database;
+import Class.staff;
 
 import java.awt.event.*;
 import java.sql.*;
@@ -13,8 +18,9 @@ public class loginFrom extends JFrame implements ActionListener {
     database db = new database();
     private JPanel contentPane;
     staff staffData = new staff();
+
     public loginFrom() {
-        // super("Login");
+        super("Login");
         if (staffData.getSUser() != "" || staffData.getSUser() != null) {
             System.out.println("staff null");
             // dispose();
@@ -46,6 +52,7 @@ public class loginFrom extends JFrame implements ActionListener {
         passwordJTextField = new JPasswordField(20);
         passwordJTextField.setFont(new Font("Tahoma", Font.PLAIN, 20));
         passwordJTextField.setBounds(420, 286, 281, 30);
+        passwordJTextField.addActionListener(this);
         contentPane.add(passwordJTextField);
 
         userJLabel = new JLabel("Username:");
@@ -75,47 +82,53 @@ public class loginFrom extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loginJButton) {
-            String username = userJTextField.getText();
-            String password = passwordJTextField.getText();
-            if (!userJTextField.getText().isEmpty() && !passwordJTextField.getText().isEmpty()) {
-                try {
-                    // connect database
-                    Connection conn = db.getConnection();
-                    Statement stmt = conn.createStatement();
-                    String sql = "SELECT * FROM staff where s_user = '" + username + "' and s_pw = '" + password + "';";
-                    System.out.println(sql);
-                    // query sql
-                    ResultSet rs = stmt.executeQuery(sql);
-                    if (rs.next()) {
-                        
-                        // set data to class staff
-                        staffData.setSId(Integer.parseInt(rs.getString("s_id")));
-                        staffData.setSUser(rs.getString("s_user"));
-                        staffData.setSPw(rs.getString("s_pw"));
-                        staffData.setSFname(rs.getString("s_fname"));
-                        staffData.setSLname(rs.getString("s_lname"));
-                        staffData.setSTel(rs.getString("s_tel"));
-                        staffData.setRole(rs.getString("role"));
-                        System.out.println(staffData.toString());
-                        dispose();
-                        mainFrom main = new mainFrom(staffData);
-                        main.setVisible(true);
-                        JOptionPane.showMessageDialog(null, "Successful Login");
-
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Invalid Username or Password");
-                    }
-
-                } catch (SQLException error) {
-                    System.out.println(error);
-                }
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Enter Username and Password");
-            }
+            login();
         } else if (e.getSource() == clearButton) {
             userJTextField.setText("");
             passwordJTextField.setText("");
+        } else if (e.getSource() == passwordJTextField) {
+            login();
+        }
+    }
+
+    public void login() {
+        String username = userJTextField.getText();
+        String password = passwordJTextField.getText();
+        if (!userJTextField.getText().isEmpty() && !passwordJTextField.getText().isEmpty()) {
+            try {
+                // connect database
+                Connection conn = db.getConnection();
+                Statement stmt = conn.createStatement();
+                String sql = "SELECT * FROM staff where s_user = '" + username + "' and s_pw = '" + password + "';";
+                System.out.println(sql);
+                // query sql
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next()) {
+
+                    // set data to class staff
+                    staffData.setSId(Integer.parseInt(rs.getString("s_id")));
+                    staffData.setSUser(rs.getString("s_user"));
+                    staffData.setSPw(rs.getString("s_pw"));
+                    staffData.setSFname(rs.getString("s_fname"));
+                    staffData.setSLname(rs.getString("s_lname"));
+                    staffData.setSTel(rs.getString("s_tel"));
+                    staffData.setRole(rs.getString("role"));
+                    System.out.println(staffData.toString());
+                    dispose();
+                    mainFrom main = new mainFrom(staffData);
+                    main.setVisible(true);
+                    JOptionPane.showMessageDialog(null, "Successful Login");
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Invalid Username or Password");
+                }
+
+            } catch (SQLException error) {
+                System.out.println(error);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Enter Username and Password");
         }
     }
 
