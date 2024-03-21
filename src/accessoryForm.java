@@ -1,11 +1,13 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import java.awt.event.*;
-import java.sql.*;
 import java.awt.*;
 import java.util.*;
 
-public class accessoryForm extends JFrame implements ActionListener {
+public class accessoryForm extends JFrame implements ActionListener, MouseListener {
 
     database db = new database();
     private JPanel contentPane;
@@ -13,20 +15,13 @@ public class accessoryForm extends JFrame implements ActionListener {
     JTable listTable;
 
     public accessoryForm() {
-        // staff staffData = StaffData;
-        // System.out.println(staffData.toString());
-        // if (staffData.getSUser() == "" || staffData.getSUser() == null) {
-        // dispose();
-        // loginFrom login = new loginFrom();
-        // login.setVisible(true);
-        // // JOptionPane.showMessageDialog(null, "Please Login");
-        // }
-        String Data[][] = { { "1", "JPANG", "15", "Edit / Delete" },
-                { "2", "Homesweet", "20", "Edit / Delete" },
-                { "3", "Lay", "10", "Edit / Delete" },
-                { "4", "CocaCola", "20", "Edit / Delete" }, };
 
-        String Header[] = { "No", "Name", "Count", "Action" };
+        String Data[][] = { { "1", "JPANG", "15", "Edit", "Delete" },
+                { "2", "Homesweet", "20", "Edit", "Delete" },
+                { "3", "Lay", "10", "Edit", "Delete" },
+                { "4", "CocaCola", "20", "Edit", "Delete" } };
+
+        String Header[] = { "No", "Name", "Count", "Edit", "Delete" };
 
         setTitle("Accessory Management System");
         setBounds(450, 190, 1014, 597);
@@ -58,19 +53,50 @@ public class accessoryForm extends JFrame implements ActionListener {
         btnAddData.setBounds(50, 75, 100, 30);
         contentPane.add(btnAddData);
 
-        // Table
-        listTable = new JTable(Data, Header);
-        listTable.setBounds(175, 75, 775, 300);
-        contentPane.add(listTable);
-        // Scroll Pane
+        DefaultTableModel model = new DefaultTableModel(Data, Header) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        listTable = new JTable(model);
+        listTable.getColumn("Edit").setCellRenderer(new ButtonRenderer());
+        listTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
+        listTable.setIntercellSpacing(new Dimension(10,10));
+        listTable.setRowHeight(40);
+        listTable.addMouseListener(this);
+
         JScrollPane scrollPane = new JScrollPane(listTable);
         scrollPane.setBounds(175, 75, 775, 300);
-        getContentPane().add(scrollPane);
-
+        contentPane.add(scrollPane);
     }
 
     public void actionPerformed(ActionEvent event) {
+        // Handle button actions here
+    }
 
+    class ButtonRenderer extends JButton implements TableCellRenderer {
+        public ButtonRenderer() {
+            setFont(new Font("Tahoma", Font.PLAIN, 16));
+            setSize(20, 10);
+            Border padding = BorderFactory.createEmptyBorder(0, 10, 0, 10);
+            setBorder(BorderFactory.createCompoundBorder(getBorder(), padding));
+            setOpaque(true);
+        }
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+                setBackground(UIManager.getColor("Button.background"));
+            }
+            setText((value == null) ? "" : value.toString());
+            return this;
+        }
     }
 
     public static void main(String[] args) {
@@ -84,5 +110,49 @@ public class accessoryForm extends JFrame implements ActionListener {
                 }
             }
         });
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        int column = listTable.getColumnModel().getColumnIndexAtX(e.getX());
+        int row = e.getY() / listTable.getRowHeight();
+
+        if (row < listTable.getRowCount() && row >= 0 && column < listTable.getColumnCount() && column >= 0) {
+            Object value = listTable.getValueAt(row, column);
+            if (value instanceof JButton) {
+                ((JButton) value).doClick();
+            } else {
+                // Handle edit and delete actions here
+                if (column == 3) {
+                    // Edit action
+                    // Implement your edit logic here
+                    System.out.println("Edit button clicked for row: " + row);
+                } else if (column == 4) {
+                    // Delete action
+                    // Implement your delete logic here
+                    System.out.println("Delete button clicked for row: " + row);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
