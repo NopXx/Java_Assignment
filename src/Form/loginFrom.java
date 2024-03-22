@@ -114,9 +114,16 @@ public class loginFrom extends JFrame implements ActionListener {
                     staffData.setSTel(rs.getString("s_tel"));
                     staffData.setRole(rs.getString("role"));
                     System.out.println(staffData.toString());
-                    dispose();
-                    mainFrom main = new mainFrom(staffData);
-                    main.setVisible(true);
+                    if (rs.getString("role").equals("ผู้บริหาร")) {
+                        dispose();
+                        reportAdminForm report = new reportAdminForm(staffData);
+                        report.setVisible(true);
+                    } else {
+                        dispose();
+                        mainFrom main = new mainFrom(staffData);
+                        main.setVisible(true);
+
+                    }
                     JOptionPane.showMessageDialog(null, "Successful Login");
 
                 } else {
