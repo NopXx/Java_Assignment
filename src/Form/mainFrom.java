@@ -99,6 +99,9 @@ public class mainFrom extends JFrame implements ActionListener {
                 login.setVisible(true);
             }
 
+        } else if (e.getSource() == reportBtn) {
+            dispose();
+            new reportForm(staffData).setVisible(true);
         }
     }
 
