@@ -85,10 +85,10 @@ public class mainFrom extends JFrame implements ActionListener {
             new accessoryForm(staffData).setVisible(true);
         } else if (e.getSource() == listBtn) {
             dispose();
-            new BorrowForm().setVisible(true);
+            new BorrowForm(staffData).setVisible(true);
         } else if (e.getSource() == staffBtn) {
             dispose();
-            new staffForm().setVisible(true);
+            new staffForm(staffData).setVisible(true);
         } else if (e.getSource() == logout) {
             System.out.println("click");
             int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
