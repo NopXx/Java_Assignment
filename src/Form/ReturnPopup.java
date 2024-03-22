@@ -35,7 +35,7 @@ public class ReturnPopup extends JFrame implements ActionListener {
 
     public ReturnPopup(int id) {
         list_id = id;
-        setTitle("Accessory Management System");
+        setTitle("Return Accessory");
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -169,6 +169,9 @@ public class ReturnPopup extends JFrame implements ActionListener {
                 setVisible(false);
                 dispose();
             }
+        } else if (event.getSource() == btnCancel) {
+            setVisible(false); // you can't see me!
+            dispose(); // Destroy the JFrame object
         }
     }
 
@@ -177,7 +180,7 @@ public class ReturnPopup extends JFrame implements ActionListener {
         String sql = "SELECT `list`.`list_id`, `list`.`username`, `list`.`a_id`, `accessory`.`a_name`, `list`.`lend_number`, `list`.`borrow_date`, `list`.`return_date`\r\n"
                 + //
                 "FROM `list` \r\n" + //
-                "\tLEFT JOIN `accessory` ON `list`.`a_id` = `accessory`.`a_id`;";
+                "\tLEFT JOIN `accessory` ON `list`.`a_id` = `accessory`.`a_id` WHERE `list`.`list_id` = " + id;
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);

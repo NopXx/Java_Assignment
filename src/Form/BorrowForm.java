@@ -24,7 +24,7 @@ public class BorrowForm extends JFrame implements ActionListener, MouseListener 
     JTextField SearchField;
     JTable listTable = new JTable();
     staff staffData;
-    int list_id;
+    int list_id, list_select_id;
 
     public BorrowForm(staff staff) {
 
@@ -98,7 +98,7 @@ public class BorrowForm extends JFrame implements ActionListener, MouseListener 
         if (event.getSource() == btnBorrow) {
             new BorrowPopup(staffData).setVisible(true);
         } else if (event.getSource() == btnReturn) {
-            new ReturnPopup(list_id).setVisible(true);
+            new ReturnPopup(list_select_id).setVisible(true);
         } else if (event.getSource() == refButton) {
             getData(null);
         } else if (event.getSource() == btnSearch) {
@@ -127,6 +127,13 @@ public class BorrowForm extends JFrame implements ActionListener, MouseListener 
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
+                if (listTable.getValueAt(row, 7) == null) {
+                    btnReturn.setEnabled(true);
+                    System.out.println("");
+                    list_select_id = Integer.parseInt(String.valueOf(listTable.getValueAt(row, 1)));
+                } else {
+                    btnReturn.setEnabled(false);
+                }
             } else {
                 setForeground(table.getForeground());
                 setBackground(UIManager.getColor("Button.background"));
@@ -233,8 +240,7 @@ public class BorrowForm extends JFrame implements ActionListener, MouseListener 
 
         if (row < listTable.getRowCount() && row >= 0 && column < listTable.getColumnCount() && column >= 0) {
             Object value = listTable.getValueAt(row, column);
-            btnReturn.setEnabled(true);
-            list_id = Integer.parseInt(String.valueOf(listTable.getValueAt(row, 1)));
+
             if (value instanceof JButton) {
                 ((JButton) value).doClick();
             } else {
@@ -244,6 +250,7 @@ public class BorrowForm extends JFrame implements ActionListener, MouseListener 
                     // Implement your edit logic here
                     String list_id = String.valueOf(listTable.getValueAt(row, 1));
                     new BorrowEdit(Integer.parseInt(list_id)).setVisible(true);
+
                     System.out.println("Edit button clicked for row: " + row);
                 } else if (column == 9) {
                     // Delete action
