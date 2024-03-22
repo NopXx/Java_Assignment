@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import Class.database;
+import Class.staff;
 
 import java.awt.event.*;
 import java.sql.*;
@@ -16,26 +17,15 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
 
     database db = new database();
     private JPanel contentPane;
-    JButton logout, btnAddData, btnSearch;
+    JButton refButton, btnAddData, btnSearch, homeBtn;
     JTextField SearchField;
-    JTable listTable;
+    JTable listTable = new JTable();
+    staff staffData;
 
-    public staffForm() {
-        // staff staffData = StaffData;
-        // System.out.println(staffData.toString());
-        // if (staffData.getSUser() == "" || staffData.getSUser() == null) {
-        // dispose();
-        // loginFrom login = new loginFrom();
-        // login.setVisible(true);
-        // // JOptionPane.showMessageDialog(null, "Please Login");
-        // }
-        String Data[][] = { { "1", "Waka", "Waka", "Manager", "Edit", "Delete" },
-                { "2", "Sukjai", "Jungboei", "Producer", "Edit", "Delete" },
-                { "3", "Lama", "Yana", "Employee", "Edit", "Delete" },
-                { "4", "Hello", "World", "Employee", "Edit", "Delete" }, };
-
-        String Header[] = { "No", "Name", "LastName", "Count", "Edit", "Delete" };
-
+    public staffForm(staff staff) {
+        staffData = staff;
+        
+        getData(null);
         setTitle("Accessory Management System");
         setBounds(450, 190, 1014, 597);
         setLocationRelativeTo(null);
@@ -47,23 +37,29 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Hello Manager waka");
+        JLabel lblNewLabel = new JLabel(staffData.getRole() + " " + staffData.getSFname());
         lblNewLabel.setForeground(Color.BLACK);
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        lblNewLabel.setBounds(700, 20, 273, 15);
+        lblNewLabel.setBounds(730, 10, 150, 30);
         contentPane.add(lblNewLabel);
 
-        logout = new JButton("Logout");
-        logout.addActionListener(this);
-        logout.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        logout.setBounds(890, 10, 100, 30);
-        contentPane.add(logout);
+        homeBtn = new JButton("Home");
+        homeBtn.addActionListener(this);
+        homeBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        homeBtn.setBounds(20, 10, 100, 30);
+        contentPane.add(homeBtn);
+
+        refButton = new JButton("Refresh");
+        refButton.setFont(new Font("Tahoma", Font.PLAIN, 16));
+        refButton.setBounds(870, 10, 100, 30);
+        refButton.addActionListener(this);
+        contentPane.add(refButton);
 
         // Button Add Data
         btnAddData = new JButton("Add Data");
         btnAddData.addActionListener(this);
         btnAddData.setFont(new Font("Tahoma", Font.PLAIN, 16));
-        btnAddData.setBounds(350, 75, 100, 30);
+        btnAddData.setBounds(50, 75, 100, 30);
         contentPane.add(btnAddData);
         // Search Bar Button
         SearchField = new JTextField();
@@ -76,29 +72,20 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
         contentPane.add(btnSearch);
 
 
-        DefaultTableModel model = new DefaultTableModel(Data, Header) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        listTable = new JTable(model);
-        listTable.getColumn("Edit").setCellRenderer(new ButtonRenderer());
-        listTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
-        listTable.setIntercellSpacing(new Dimension(10,10));
-        listTable.getColumn("No").setMaxWidth(25);
-        listTable.setRowHeight(40);
         listTable.addMouseListener(this);
         // Scroll Pane
         JScrollPane scrollPane = new JScrollPane(listTable);
-        scrollPane.setBounds(350, 125, 600, 300);
+        scrollPane.setBounds(50, 125, 900, 300);
         getContentPane().add(scrollPane);
 
+        
     }
 
     public void actionPerformed(ActionEvent event) {
-
+        if (event.getSource() == homeBtn) {
+            dispose();
+            new mainFrom(staffData).setVisible(true);
+        }
     }
 
     class ButtonRenderer extends JButton implements TableCellRenderer {
@@ -124,17 +111,82 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
         }
     }
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    staffForm frame = new staffForm();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
+    public void getData(String keyword) {
+
+        Connection conn = db.getConnection();
+        int accessoryCount = 1; // ตัวแปรที่เก็บจำนวนข้อมูล accessory
+        String sql;
+        System.out.println("keywords: " + keyword);
+        if (keyword == null) {
+            sql = "SELECT * FROM staff";
+        } else {
+            sql = "SELECT * FROM staff WHERE s_fname LIKE '%" + keyword + "%' or s_fname LIKE '%" + keyword + "%'";
+        }
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            // สร้างตาราง
+            ResultSetMetaData rsmd = rs.getMetaData(); // หัวตาราง
+            // เก็บข้อมูลที่โยนให้ตาราง
+            DefaultTableModel dtm = new DefaultTableModel();
+            // เริ่มเรียงคอลัมน์
+            String[] colName = new String[rsmd.getColumnCount() + 3];
+            // + 3 = column add to column from table
+            // วนรอบเพื่อสร้าง column และ add column loop for จะได้หัวตาราง
+            int index = 0;
+            for (; index < rsmd.getColumnCount() + 1; index++) {
+                // ส่งค่า index เข้ามาด้วย
+                if (index == 0) {
+                    colName[index] = "No";
+                } else {
+                    colName[index] = rsmd.getColumnName(index);
                 }
             }
-        });
+            colName[index] = "Edit";
+            colName[index + 1] = "Delete";
+            for (int i = 0; i < colName.length; i++) {
+                System.out.println(colName[i]);
+            }
+            dtm.setColumnIdentifiers(colName);
+            // เริ่มเรียงข้อมูล
+            while (rs.next()) {
+                Object[] rowData = new Object[rsmd.getColumnCount() + 3];
+                // + 3 = column add to column from table
+                int i = 0;
+                for (; i < rsmd.getColumnCount() + 1; i++) {
+                    // index จะเริ่มต้นที่ 1
+                    if (i == 0) {
+                        rowData[i] = accessoryCount;
+                    } else {
+                        rowData[i] = rs.getObject(i);
+                    }
+                }
+                rowData[index] = "Edit";
+                rowData[index + 1] = "Delete";
+                dtm.addRow(rowData);
+                // นับจำนวนสินค้าคงคลัง
+                accessoryCount++;
+            }
+            // เพิ่มข้อมูลในตาราง
+            listTable.setModel(dtm);
+            // setup table
+            listTable.setFont(new Font("Tahoma", Font.PLAIN, 16));
+            listTable.getColumn("Edit").setCellRenderer(new ButtonRenderer());
+            listTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
+            listTable.setIntercellSpacing(new Dimension(10, 10));
+            listTable.setRowHeight(40);
+            // hide column a_id
+            listTable.getColumn("s_id").setMaxWidth(0);
+            listTable.getColumn("s_id").setMinWidth(0);
+            listTable.getColumn("s_id").setPreferredWidth(0);
+            // set width column no
+            listTable.getColumn("No").setMaxWidth(40);
+
+        } catch (SQLException ex) {
+            // Logger.getLogger(lab.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex, "error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     @Override

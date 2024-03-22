@@ -1,5 +1,9 @@
 package Class;
+
+import java.sql.*;
+
 public class staff {
+    private database db = new database();
     private int s_id;
     private String s_user;
     private String s_pw;
@@ -52,6 +56,62 @@ public class staff {
     }
     public String getRole() {
         return role;
+    }
+
+    public void AddStaff() {
+        Connection conn = db.getConnection();
+        String sql = "INSERT INTO staff (s_id, s_user, s_pw, s_fname, s_lname, s_tel, role) VALUES (?,?,?,?,?,?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, s_user);
+            ps.setString(2, s_pw);
+            ps.setString(3, s_fname);
+            ps.setString(4, s_lname);
+            ps.setString(5, s_tel);
+            ps.setString(6, role);
+            // query
+            ps.executeUpdate();
+            // close connection
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void UpdateStaff() {
+        Connection conn = db.getConnection();
+        String sql = "UPDATE staff SET s_user =?, s_pw =?, s_fname =?, s_lname =?, s_tel =?, role =? WHERE s_id =?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, s_user);
+            ps.setString(2, s_pw);
+            ps.setString(3, s_fname);
+            ps.setString(4, s_lname);
+            ps.setString(5, s_tel);
+            ps.setString(6, role);
+            ps.setInt(7, s_id);
+            // query
+            ps.executeUpdate();
+            // close connection
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void DeleteStaff(int id) {
+        Connection conn = db.getConnection();
+        String sql = "DELETE FROM staff WHERE s_id =?";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            // query
+            ps.executeUpdate();
+            // close connection
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public String toString() {
