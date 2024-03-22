@@ -69,6 +69,7 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
         btnSearch = new JButton("Search");
         btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 16));
         btnSearch.setBounds(850, 75, 100, 30);
+        btnSearch.addActionListener(this);
         contentPane.add(btnSearch);
 
 
@@ -85,6 +86,16 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
         if (event.getSource() == homeBtn) {
             dispose();
             new mainFrom(staffData).setVisible(true);
+        } else if (event.getSource() == btnAddData) {
+            new staffAdd().setVisible(true);
+        } else if (event.getSource() == refButton) {
+            getData(null);
+        } else if (event.getSource() == btnSearch) {
+            if (SearchField.getText().isEmpty()) {
+                getData(null);
+            } else {
+                getData(SearchField.getText());
+            }
         }
     }
 
@@ -120,7 +131,7 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
         if (keyword == null) {
             sql = "SELECT * FROM staff";
         } else {
-            sql = "SELECT * FROM staff WHERE s_fname LIKE '%" + keyword + "%' or s_fname LIKE '%" + keyword + "%'";
+            sql = "SELECT * FROM staff WHERE s_fname LIKE '%" + keyword + "%' or s_lname LIKE '%" + keyword + "%' or s_user LIKE '%" + keyword + "%';";
         }
         try {
             Statement stmt = conn.createStatement();
@@ -180,6 +191,10 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
             listTable.getColumn("s_id").setMaxWidth(0);
             listTable.getColumn("s_id").setMinWidth(0);
             listTable.getColumn("s_id").setPreferredWidth(0);
+            // hide column a_id
+            listTable.getColumn("s_pw").setMaxWidth(0);
+            listTable.getColumn("s_pw").setMinWidth(0);
+            listTable.getColumn("s_pw").setPreferredWidth(0);
             // set width column no
             listTable.getColumn("No").setMaxWidth(40);
 
@@ -200,15 +215,31 @@ public class staffForm extends JFrame implements ActionListener, MouseListener {
                 ((JButton) value).doClick();
             } else {
                 // Handle edit and delete actions here
-                if (column == 4) {
+                if (column == 8) {
                     // Edit action
                     // Implement your edit logic here
-                    new staffAdd().setVisible(true);
+                    String s_id = String.valueOf(listTable.getValueAt(row, 1));
+                    new staffEdit(Integer.parseInt(s_id)).setVisible(true);
                     System.out.println("Edit button clicked for row: " + row);
-                } else if (column == 5) {
+                } else if (column == 9) {
                     // Delete action
                     // Implement your delete logic here
-                    System.out.println("Delete button clicked for row: " + row);
+                    String s_id = String.valueOf(listTable.getValueAt(row, 1));
+                    if (Integer.parseInt(s_id) == staffData.getSId()) {
+                        JOptionPane.showMessageDialog(this, "You can't delete your data", "error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        staff st = new staff();
+                        String username = String.valueOf(listTable.getValueAt(row, 2));
+                        int a = JOptionPane.showConfirmDialog(null,
+                                "Delete Staff\n" + username + " ?");
+                        if (a == JOptionPane.YES_OPTION) {
+                            st.DeleteStaff(Integer.parseInt(s_id));
+                            JOptionPane.showMessageDialog(null, "Delete Staff success");
+                            getData(null);
+                        }
+                        
+                        System.out.println("Delete button clicked for row: " + row);
+                    }
                 }
             }
         }

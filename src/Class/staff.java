@@ -60,7 +60,7 @@ public class staff {
 
     public void AddStaff() {
         Connection conn = db.getConnection();
-        String sql = "INSERT INTO staff (s_id, s_user, s_pw, s_fname, s_lname, s_tel, role) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO staff (s_user, s_pw, s_fname, s_lname, s_tel, role) VALUES (?,?,?,?,?,?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, s_user);

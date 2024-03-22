@@ -7,11 +7,10 @@ import Class.database;
 import Class.staff;
 
 import java.awt.event.*;
+import java.sql.*;
 import java.awt.*;
 
-
-public class staffAdd extends JFrame implements ActionListener {
-
+public class staffEdit extends JFrame implements ActionListener {
     database db = new database();
     private JPanel contentPane;
     JButton logout, btnSave, btnCancel;
@@ -21,7 +20,9 @@ public class staffAdd extends JFrame implements ActionListener {
     JComboBox<String> RoleCombo;
     String[] roleData;
 
-    public staffAdd() {
+    public staffEdit(int staff_id) {
+        setTitle("Edit Staff");
+
         roleData = new String[2];
         roleData[0] = "เจ้าหน้าที่";
         roleData[1] = "ผู้บริหาร";
@@ -37,7 +38,7 @@ public class staffAdd extends JFrame implements ActionListener {
         contentPane.setLayout(null);
 
         // Button Add Data
-        AddLabel = new JLabel("Add Staff Data");
+        AddLabel = new JLabel("Edit Staff");
         AddLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
         AddLabel.setBounds(200, 75, 150, 30);
         contentPane.add(AddLabel);
@@ -104,6 +105,7 @@ public class staffAdd extends JFrame implements ActionListener {
         btnCancel.addActionListener(this);
         contentPane.add(btnCancel);
 
+        getData(staff_id);
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -118,7 +120,7 @@ public class staffAdd extends JFrame implements ActionListener {
                 st.setSLname(LnameField.getText());
                 st.setSTel(TelField.getText());
                 st.setRole(RoleCombo.getSelectedItem().toString());
-                st.AddStaff();
+                st.UpdateStaff();
                 JOptionPane.showMessageDialog(null, "Add Success");
                 this.dispose();
             }
@@ -128,4 +130,22 @@ public class staffAdd extends JFrame implements ActionListener {
         }
     }
 
+    public void getData(int id) {
+        Connection conn = db.getConnection();
+        String sql = "SELECT * FROM staff WHERE s_id = " + id;
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                UserField.setText(rs.getString("s_user"));
+                PassField.setText(rs.getString("s_pw"));
+                NameField.setText(rs.getString("s_fname"));
+                LnameField.setText(rs.getString("s_lname"));
+                TelField.setText(rs.getString("s_tel"));
+                RoleCombo.setSelectedItem(rs.getString("role"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
 }
