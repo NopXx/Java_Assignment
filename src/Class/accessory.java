@@ -11,6 +11,12 @@ public class accessory {
     public accessory() {
     }
 
+    public accessory(int Id, String Name, int count) {
+        accessoryId = Id;
+        accessoryName = Name;
+        accessoryCount = count;
+    }
+
     public void setAccessoryId(int Id) {
         accessoryId = Id;
     }
