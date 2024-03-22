@@ -7,9 +7,7 @@ import Class.database;
 import Class.staff;
 
 import java.awt.event.*;
-import java.sql.*;
 import java.awt.*;
-import java.util.*;
 
 public class mainFrom extends JFrame implements ActionListener {
     database db = new database();
