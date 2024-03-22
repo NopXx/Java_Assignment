@@ -154,6 +154,7 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
             // เพิ่มข้อมูลในตาราง
             listTable.setModel(dtm);
             // setup table
+            listTable.setFont(new Font("Tahoma", Font.PLAIN, 16));
             listTable.getColumn("Edit").setCellRenderer(new ButtonRenderer());
             listTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
             listTable.setIntercellSpacing(new Dimension(10, 10));
