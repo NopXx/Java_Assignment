@@ -22,7 +22,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.Date;
 
-public class BorrowPopup extends JFrame implements ActionListener {
+public class BorrowEdit extends JFrame implements ActionListener {
 
     database db = new database();
     private JPanel contentPane;
@@ -34,12 +34,13 @@ public class BorrowPopup extends JFrame implements ActionListener {
     JComboBox<String> accessoryCombo;
     accessory acc[];
     String dateStr = "";
-    staff staffData;
+    int list_id;
+    UtilDateModel model = new UtilDateModel();
 
-    public BorrowPopup(staff staff) {
-        staffData = staff;
-        getData();
-        setTitle("Add Lend");
+    public BorrowEdit(int id) {
+        list_id = id;
+        getDataCombox();
+        setTitle("Edit Lend");
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -88,7 +89,7 @@ public class BorrowPopup extends JFrame implements ActionListener {
         contentPane.add(DateLabel);
 
         // datepicker
-        UtilDateModel model = new UtilDateModel();
+        
         Properties p = new Properties();
         p.put("text.today", "Today");
         p.put("text.month", "Month");
@@ -112,6 +113,7 @@ public class BorrowPopup extends JFrame implements ActionListener {
         btnCancel.addActionListener(this);
         contentPane.add(btnCancel);
 
+        getData(id);
         // set windows
         setContentPane(contentPane);
         pack();
@@ -163,9 +165,9 @@ public class BorrowPopup extends JFrame implements ActionListener {
                 lend.setAccessoryId(a_id);
                 lend.setLendNumber(count);
                 lend.setBorrow_date(date);
-                lend.setLendSId(staffData.getSId());
-                lend.addLendAccessory();
-                JOptionPane.showMessageDialog(null, "Lend Success");
+                lend.setLendSId(list_id);
+                lend.UpdateLendAccessory();
+                JOptionPane.showMessageDialog(null, "Update Lend Success");
                 setVisible(false); // you can't see me!
                 dispose(); // Destroy the JFrame object
             }
@@ -175,7 +177,33 @@ public class BorrowPopup extends JFrame implements ActionListener {
         }
     }
 
-    public void getData() {
+    public void getData(int id) {
+        System.out.println(id);
+        Connection conn = db.getConnection();
+        try {
+            Statement stmt = conn.createStatement();
+            String sql = "SELECT * FROM list WHERE list_id = " + id;
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                model.setValue(rs.getDate("borrow_date"));
+                UserField.setText(rs.getString("username"));
+                CountField.setText(rs.getString("lend_number"));
+                for (int i = 0; i < acc.length; i++) {
+                    if (acc[i].getAccessoryId() == rs.getInt("a_id")) {
+                        accessoryCombo.setSelectedItem(acc[i].getAccessoryName());
+                    }
+                }
+            }
+            
+            
+
+        } catch (SQLException ex) {
+            // Logger.getLogger(lab.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex, "error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void getDataCombox() {
         Connection conn = db.getConnection();
         String sql = "Select * from accessory";
         try {
