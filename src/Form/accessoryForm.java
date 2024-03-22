@@ -115,6 +115,7 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
             DefaultTableModel dtm = new DefaultTableModel();
             // เริ่มเรียงคอลัมน์
             String[] colName = new String[rsmd.getColumnCount() + 3];
+            // + 3 = column add to column from table
             // วนรอบเพื่อสร้าง column และ add column loop for จะได้หัวตาราง
             int index = 0;
             for (; index < rsmd.getColumnCount() + 1; index++) {
@@ -134,6 +135,7 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
             // เริ่มเรียงข้อมูล
             while (rs.next()) {
                 Object[] rowData = new Object[rsmd.getColumnCount() + 3];
+                // + 3 = column add to column from table
                 int i = 0;
                 for (; i < rsmd.getColumnCount() + 1; i++) {
                     // index จะเริ่มต้นที่ 1
@@ -220,11 +222,13 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
                 ((JButton) value).doClick();
             } else {
                 if (column == 4) {
+                    // column edit
                     // open form
                     String a_id = String.valueOf(listTable.getValueAt(row, 1));
                     new accessoryEdit(Integer.parseInt(a_id)).setVisible(true);
 
                 } else if (column == 5) {
+                    // column delete
                     String accessoryName = String.valueOf(listTable.getValueAt(row, 2));
                     String a_id = String.valueOf(listTable.getValueAt(row, 1));
                     int a = JOptionPane.showConfirmDialog(null,
