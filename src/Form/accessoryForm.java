@@ -13,7 +13,6 @@ import Class.staff;
 import java.awt.event.*;
 import java.sql.*;
 import java.awt.*;
-import java.util.*;
 
 public class accessoryForm extends JFrame implements ActionListener, MouseListener {
 
@@ -28,7 +27,7 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
     public accessoryForm(staff StaffData) {
         staffData = StaffData;
 
-        getData("select * from accessory");
+        getData(null);
 
         setTitle("Accessory Management System");
         setBounds(450, 190, 1014, 597);
@@ -74,6 +73,7 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
         btnSearch = new JButton("Search");
         btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 16));
         btnSearch.setBounds(825, 75, 100, 30);
+        btnSearch.addActionListener(this);
         contentPane.add(btnSearch);
 
         refButton = new JButton("Refresh");
@@ -82,16 +82,6 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
         refButton.addActionListener(this);
         contentPane.add(refButton);
 
-        // setup table
-        listTable.getColumn("Edit").setCellRenderer(new ButtonRenderer());
-        listTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
-        listTable.setIntercellSpacing(new Dimension(10, 10));
-        listTable.setRowHeight(40);
-
-        // hide column a_id
-        listTable.getColumn("a_id").setMaxWidth(0);
-        listTable.getColumn("a_id").setMinWidth(0);
-        listTable.getColumn("a_id").setPreferredWidth(0);
         listTable.addMouseListener(this);
 
         JScrollPane scrollPane = new JScrollPane(listTable);
@@ -104,9 +94,17 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
     }
 
     // Get Data DB to Table
-    public void getData(String sql) {
+    public void getData(String keyword) {
+
         Connection conn = db.getConnection();
-        int accessoryCount = 1; // ตัวแปรที่เก็บจำนวน pd_id
+        int accessoryCount = 1; // ตัวแปรที่เก็บจำนวนข้อมูล accessory
+        String sql;
+        System.out.println("keywords: " + keyword);
+        if (keyword == null) {
+            sql = "SELECT * FROM accessory";
+        } else {
+            sql = "SELECT * FROM accessory WHERE a_name LIKE '%" + keyword + "%'";
+        }
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -151,9 +149,17 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
                 // นับจำนวนสินค้าคงคลัง
                 accessoryCount++;
             }
-            // แสดงข้อมูลในตาราง
+            // เพิ่มข้อมูลในตาราง
             listTable.setModel(dtm);
-            // แสดงจำนวนข้อมูลรายการที่พบ
+            // setup table
+            listTable.getColumn("Edit").setCellRenderer(new ButtonRenderer());
+            listTable.getColumn("Delete").setCellRenderer(new ButtonRenderer());
+            listTable.setIntercellSpacing(new Dimension(10, 10));
+            listTable.setRowHeight(40);
+            // hide column a_id
+            listTable.getColumn("a_id").setMaxWidth(0);
+            listTable.getColumn("a_id").setMinWidth(0);
+            listTable.getColumn("a_id").setPreferredWidth(0);
 
         } catch (SQLException ex) {
             // Logger.getLogger(lab.class.getName()).log(Level.SEVERE, null, ex);
@@ -168,8 +174,13 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
         } else if (event.getSource() == btnAddData) {
             new accessoryAdd().setVisible(true);
         } else if (event.getSource() == refButton) {
-            dispose();
-            new accessoryForm(staffData).setVisible(true);
+            getData(null);
+        } else if (event.getSource() == btnSearch) {
+            if (SearchField.getText().isEmpty()) {
+                getData(null);
+            } else {
+                getData(SearchField.getText());
+            }
         }
     }
 
@@ -208,14 +219,23 @@ public class accessoryForm extends JFrame implements ActionListener, MouseListen
             if (value instanceof JButton) {
                 ((JButton) value).doClick();
             } else {
-                if (column == 3) {
+                if (column == 4) {
                     // open form
-                    new accessoryAdd().setVisible(true);
-                    System.out.println("Edit button clicked for row: " + row);
-                } else if (column == 4) {
-                    // Delete action
-                    // Implement your delete logic here
-                    System.out.println("Delete button clicked for row: " + row);
+                    String a_id = String.valueOf(listTable.getValueAt(row, 1));
+                    new accessoryEdit(Integer.parseInt(a_id)).setVisible(true);
+
+                } else if (column == 5) {
+                    String accessoryName = String.valueOf(listTable.getValueAt(row, 2));
+                    String a_id = String.valueOf(listTable.getValueAt(row, 1));
+                    int a = JOptionPane.showConfirmDialog(null,
+                            "Delete Accessory\n" + accessoryName + " ?");
+                    // JOptionPane.setRootFrame(null);
+                    if (a == JOptionPane.YES_OPTION) {
+                        accessory acc = new accessory();
+                        acc.deleteAccessory(Integer.parseInt(a_id));
+                        JOptionPane.showMessageDialog(null, "Delete Accessory success");
+                        getData(null);
+                    }
                 }
             }
         }

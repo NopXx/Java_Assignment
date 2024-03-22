@@ -7,19 +7,22 @@ import Class.accessory;
 import Class.database;
 
 import java.awt.event.*;
+import java.sql.*;
 import java.awt.*;
 
-public class accessoryAdd extends JFrame implements ActionListener {
-
+public class accessoryEdit extends JFrame implements ActionListener {
     database db = new database();
     private JPanel contentPane;
     JButton logout, btnSave, btnCancel;
     JLabel AddLabel, NameLabel, CountLabel;
     JTextField NameField, CountField;
     JTable listTable;
+    private int a_id;
 
-    public accessoryAdd() {
-        setTitle("Accessory Management System");
+    public accessoryEdit(int id) {
+        a_id = id;
+        
+        setTitle("Edit Accessory");
 
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -27,7 +30,7 @@ public class accessoryAdd extends JFrame implements ActionListener {
         contentPane.setLayout(null);
 
         // Button Add Data
-        AddLabel = new JLabel("Add Data");
+        AddLabel = new JLabel("Edit Data");
         AddLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
         AddLabel.setBounds(150, 75, 100, 30);
         contentPane.add(AddLabel);
@@ -69,6 +72,7 @@ public class accessoryAdd extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
 
+        getData(a_id);
     }
 
     public void actionPerformed(ActionEvent event) {
@@ -77,10 +81,11 @@ public class accessoryAdd extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Please Fill All Field");
             } else {
                 accessory acc = new accessory();
+                acc.setAccessoryId(a_id);
                 acc.setAccessoryName(NameField.getText());
                 acc.setAccessoryCount(Integer.parseInt(CountField.getText()));
-                acc.addAccessory();
-                JOptionPane.showMessageDialog(null, "Insert Accessory Success");
+                acc.editAccessory();
+                JOptionPane.showMessageDialog(null, "Edit Accessory Success");
                 setVisible(false); // you can't see me!
                 dispose(); // Destroy the JFrame object
             }
@@ -91,17 +96,25 @@ public class accessoryAdd extends JFrame implements ActionListener {
         }
     }
 
-    // remove main
-    // public static void main(String[] args) {
-    // EventQueue.invokeLater(new Runnable() {
-    // public void run() {
-    // try {
-    // accessoryAdd frame = new accessoryAdd();
-    // frame.setVisible(true);
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    // }
-    // });
-    // }
+    // Get Data DB to Table
+    public void getData(int id) {
+        System.out.println(id);
+        Connection conn = db.getConnection();
+        try {
+            Statement stmt = conn.createStatement();
+            String sql = "SELECT * FROM accessory WHERE a_id = " + id;
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                NameField.setText(rs.getString("a_name"));
+                CountField.setText(rs.getString("a_count"));
+            }
+            
+            
+
+        } catch (SQLException ex) {
+            // Logger.getLogger(lab.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex, "error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }
