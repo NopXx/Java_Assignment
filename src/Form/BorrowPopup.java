@@ -113,6 +113,7 @@ public class BorrowPopup extends JFrame implements ActionListener {
         contentPane.add(btnCancel);
 
         // set windows
+
         setContentPane(contentPane);
         pack();
         setBounds(450, 190, 550, 550);
@@ -156,7 +157,7 @@ public class BorrowPopup extends JFrame implements ActionListener {
 
                 int a_id = acc[index].getAccessoryId();
                 int count = Integer.parseInt(CountField.getText());
-                
+
                 String date = dateStr;
                 lend_accessory lend = new lend_accessory();
                 lend.setUserName(UserField.getText());
@@ -178,24 +179,33 @@ public class BorrowPopup extends JFrame implements ActionListener {
     public void getData() {
         Connection conn = db.getConnection();
         String sql = "Select * from accessory";
+        int row_count = 0;
+        String sql_count = "select count(*) AS recordCount from accessory";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql_count);
+            
+            if (rs.next()) {
+                row_count = rs.getInt("recordCount");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int index = 0;
-            acc = new accessory[rsmd.getColumnCount() + 1];
+            acc = new accessory[row_count];
+            accessoryData = new String[row_count];
+            int i = 0;
             while (rs.next()) {
-                acc[index] = new accessory(Integer.parseInt(rs.getString("a_id")), rs.getString("a_name"),
-                        Integer.parseInt(rs.getString("a_count")));
-                index++;
+                acc[i] = new accessory(Integer.parseInt(rs.getString("a_id")), rs.getString("a_name"),
+                Integer.parseInt(rs.getString("a_count")));
+                System.out.println(rs.getString("a_name"));
+                accessoryData[i] = rs.getString("a_name");
+                
+                i++;
+            }
 
-            }
-            // set data to combox
-            accessoryData = new String[acc.length];
-            for (int i = 0; i < acc.length; i++) {
-                accessoryData[i] = acc[i].getAccessoryName();
-            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
