@@ -101,14 +101,15 @@ public class lend_accessory {
 
     public void UpdateLendAccessory() {
         Connection conn = db.getConnection();
-        String sql = "UPDATE `list` SET `username` = ?, `a_id` = ?, `lend_number` =?, `borrow_date` =?, WHERE `list_id` = ?";
+        String sql = "UPDATE `list` SET `username` = ?, `a_id` = ?, `lend_number` =?, `borrow_date` =?, `lend_s_id` = ? WHERE `list_id` = ?";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, getUserName());
             ps.setInt(2, getAccessoryId());
             ps.setInt(3, getLendNumber());
             ps.setString(4, getBorrowDate());
-            ps.setInt(5, getListId());
+            ps.setInt(5, getLendSId());
+            ps.setInt(6, getListId());
             // query
             ps.executeUpdate();
             ps.close();

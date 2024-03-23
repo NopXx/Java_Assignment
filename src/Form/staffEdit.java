@@ -19,8 +19,10 @@ public class staffEdit extends JFrame implements ActionListener {
     JTable listTable;
     JComboBox<String> RoleCombo;
     String[] roleData;
+    int staffId;
 
     public staffEdit(int staff_id) {
+        staffId = staff_id;
         setTitle("Edit Staff");
 
         roleData = new String[2];
@@ -119,6 +121,7 @@ public class staffEdit extends JFrame implements ActionListener {
                 st.setSFname(NameField.getText());
                 st.setSLname(LnameField.getText());
                 st.setSTel(TelField.getText());
+                st.setSId(staffId);
                 st.setRole(RoleCombo.getSelectedItem().toString());
                 st.UpdateStaff();
                 JOptionPane.showMessageDialog(null, "Add Success");

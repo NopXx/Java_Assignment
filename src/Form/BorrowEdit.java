@@ -35,10 +35,12 @@ public class BorrowEdit extends JFrame implements ActionListener {
     accessory acc[];
     String dateStr = "";
     int list_id;
+    staff staffData;
     UtilDateModel model = new UtilDateModel();
 
-    public BorrowEdit(int id) {
+    public BorrowEdit(int id, staff staff) {
         list_id = id;
+        staffData = staff;
         getDataCombox();
         setTitle("Edit Lend");
 
@@ -166,6 +168,7 @@ public class BorrowEdit extends JFrame implements ActionListener {
                 lend.setLendNumber(count);
                 lend.setBorrow_date(date);
                 lend.setLendSId(list_id);
+                lend.setLendSId(staffData.getSId());
                 lend.UpdateLendAccessory();
                 JOptionPane.showMessageDialog(null, "Update Lend Success");
                 setVisible(false); // you can't see me!

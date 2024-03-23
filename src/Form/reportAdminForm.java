@@ -63,14 +63,7 @@ public class reportAdminForm extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == homeBtn) {
-            dispose();
-            new mainFrom(staffData).setVisible(true);
-        } else if (event.getSource() == btnAllData) {
-            getData(null, 0);
-        } else if (event.getSource() == btnReturnData) {
-            getData(null, 1);
-        } else if (event.getSource() == logoutButton) {
+        if (event.getSource() == logoutButton) {
             System.out.println("click");
             int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
             // JOptionPane.setRootFrame(null);

@@ -12,26 +12,21 @@ import java.awt.*;
 import java.util.*;
 
 public class loginFrom extends JFrame implements ActionListener {
-    JLabel userJLabel, passwordJLabel;
-    JTextField userJTextField, passwordJTextField;
-    JButton loginJButton, clearButton;
-    database db = new database();
+    private JLabel userJLabel, passwordJLabel;
+    private JTextField userJTextField, passwordJTextField;
+    private JButton loginJButton, clearButton;
+    private database db = new database();
     private JPanel contentPane;
-    staff staffData = new staff();
+    private staff staffData = new staff();
 
     public loginFrom() {
         super("Login");
-        if (staffData.getSUser() != "" || staffData.getSUser() != null) {
-            System.out.println("staff null");
-            // dispose();
-            // mainFrom main = new mainFrom();
-            // main.setVisible(true);
-            // JOptionPane.showMessageDialog(null, "Please Login");
-        }
+
         setBounds(450, 190, 1014, 597);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -92,10 +87,11 @@ public class loginFrom extends JFrame implements ActionListener {
     }
 
     public void login() {
-        String username = userJTextField.getText();
-        String password = passwordJTextField.getText();
+
         if (!userJTextField.getText().isEmpty() && !passwordJTextField.getText().isEmpty()) {
             try {
+                String username = userJTextField.getText();
+                String password = passwordJTextField.getText();
                 // connect database
                 Connection conn = db.getConnection();
                 Statement stmt = conn.createStatement();

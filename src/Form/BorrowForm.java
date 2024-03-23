@@ -248,8 +248,12 @@ public class BorrowForm extends JFrame implements ActionListener, MouseListener 
                 if (column == 8) {
                     // Edit action
                     // Implement your edit logic here
+                    if (listTable.getValueAt(row, 7) == null) {
                     String list_id = String.valueOf(listTable.getValueAt(row, 1));
-                    new BorrowEdit(Integer.parseInt(list_id)).setVisible(true);
+                    new BorrowEdit(Integer.parseInt(list_id), staffData).setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "can't edit the selected");
+                    }
 
                     System.out.println("Edit button clicked for row: " + row);
                 } else if (column == 9) {
