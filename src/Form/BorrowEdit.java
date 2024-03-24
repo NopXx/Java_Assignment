@@ -238,17 +238,4 @@ public class BorrowEdit extends JFrame implements ActionListener {
         }
     }
 
-    // remove main
-    // public static void main(String[] args) {
-    // EventQueue.invokeLater(new Runnable() {
-    // public void run() {
-    // try {
-    // accessoryAdd frame = new accessoryAdd();
-    // frame.setVisible(true);
-    // } catch (Exception e) {
-    // e.printStackTrace();
-    // }
-    // }
-    // });
-    // }
 }

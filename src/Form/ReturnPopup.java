@@ -10,6 +10,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import Class.database;
 import Class.return_accessory;
+import Class.staff;
 
 import java.awt.event.*;
 import java.sql.*;
@@ -32,9 +33,11 @@ public class ReturnPopup extends JFrame implements ActionListener {
     JTable listTable;
     String dateStr;
     int list_id;
+    private staff staffData;
 
-    public ReturnPopup(int id) {
+    public ReturnPopup(int id, staff staff) {
         list_id = id;
+        staffData = staff;
         setTitle("Return Accessory");
 
         contentPane = new JPanel();
@@ -164,6 +167,7 @@ public class ReturnPopup extends JFrame implements ActionListener {
                 re_acc.setReturn_date(dateStr);
                 re_acc.setAccessoryStatus(StatusField.getText());
                 re_acc.setFine(Double.parseDouble(FineField.getText()));
+                re_acc.setReturn_sId(staffData.getSId());
                 re_acc.UpdateReturn();
                 JOptionPane.showMessageDialog(null, "Update Return Accessory Success");
                 setVisible(false);

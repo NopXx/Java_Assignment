@@ -134,17 +134,4 @@ public class loginFrom extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, "Enter Username and Password");
         }
     }
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    loginFrom frame = new loginFrom();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 }

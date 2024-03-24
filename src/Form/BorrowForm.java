@@ -98,7 +98,7 @@ public class BorrowForm extends JFrame implements ActionListener, MouseListener 
         if (event.getSource() == btnBorrow) {
             new BorrowPopup(staffData).setVisible(true);
         } else if (event.getSource() == btnReturn) {
-            new ReturnPopup(list_select_id).setVisible(true);
+            new ReturnPopup(list_select_id, staffData).setVisible(true);
         } else if (event.getSource() == refButton) {
             getData(null);
         } else if (event.getSource() == btnSearch) {
